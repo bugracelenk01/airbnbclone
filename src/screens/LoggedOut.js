@@ -33,7 +33,7 @@ export default class LoggedOut extends Component {
             <RoundedButton 
               text="Create Account" 
               textColor={colors.white}
-              handleOnPress={this.onCreateAccountPress}
+       	      handleOnPress={this.onCreateAccountPress}
             />
 
             <TouchableOpacity 
