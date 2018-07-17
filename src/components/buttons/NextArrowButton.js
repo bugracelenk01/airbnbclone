@@ -9,11 +9,13 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
 export default class NextArrowButton extends Component{
     render() {
-        const { handleNextButton } = this.props;
+        const { handleNextButton, disabled } = this.props;
+        const opacityStyle = disabled ? 0.2 : 0.6;
         return(
             <TouchableOpacity 
-                style={styles.button}
+                style={[{opacity :opacityStyle}, styles.button]}
                 onPress={handleNextButton}
+                disabled={disabled}
             >
                 <Icon 
                     name="angle-right"
@@ -27,7 +29,8 @@ export default class NextArrowButton extends Component{
 }
 
 NextArrowButton.propTypes= {
-    handleNextButton: PropTypes.func.isRequired,
+    handleNextButton: PropTypes.func,
+    disabled: PropTypes.bool,
 }
 
 const styles = StyleSheet.create({
