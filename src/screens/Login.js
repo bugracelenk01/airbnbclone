@@ -12,15 +12,17 @@ import colors from '../styles/colors';
 import InputField from '../components/form/InputField';
 import NextArrowButton from '../components/buttons/NextArrowButton';
 import Notification from '../components/Notification'
+import Loader from '../components/Loader';
 
 export default class Login extends Component{
     constructor(props){
         super(props);
         this.state = {
-            formValid: false,
+            formValid: true,
             validEmail: false,
             emailAdress: '',
             validPassword: false,
+            loadingVisible: false,
         }
         this.handleCloseNotification = this.handleCloseNotification.bind(this);
         this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -29,11 +31,16 @@ export default class Login extends Component{
         this.toggleNextButtonState = this.toggleNextButtonState.bind(this);
     }
     handleNextButton() {
-        if(this.state.emailAdress === 'hello@gmail.com') {
-            this.setState({ formValid: true });
-        } else {
-            this.setState({ formValid: false });
-        }
+        this.setState({ loadingVisible: true });
+
+        setTimeout(() => {
+            if(this.state.emailAdress === 'hello@gmail.com') {
+                this.setState({ formValid: true, loadingVisible: false });
+            } else {
+                this.setState({ formValid: false, loadingVisible: false });
+            }
+        }, 2000);
+        
     }
     handleCloseNotification() {
         this.setState({ formValid: true });
@@ -57,7 +64,7 @@ export default class Login extends Component{
             if(password.length > 4){
                 this.setState({ validPassword: true });
             }
-        } else if(password.length <= 4){
+        } else if(password <= 4){
             this.setState({ validPassword: false });
         }
     }
@@ -69,7 +76,7 @@ export default class Login extends Component{
         return true;
     }
     render() {
-        const { formValid } = this.state;
+        const { formValid, loadingVisible } = this.state;
         const showNotification = formValid ? false : true;
         const background = formValid ? colors.green01 : colors.darkOrange;
         //const notificationMarginTop = showNotification ? {marginTop: 10} : {};
@@ -115,6 +122,10 @@ export default class Login extends Component{
                         />
                     </View>
                 </View>
+                <Loader
+                modalVisible={loadingVisible}
+                animationType="fade"
+                />
             </KeyboardAvoidingView>
         );
     }
