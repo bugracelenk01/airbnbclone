@@ -61,10 +61,10 @@ export default class Login extends Component{
     }
     handlePasswordChange(password) {
         if(!this.validPassword) {
-            if(password.length > 4){
+            if(password.length >= 4){
                 this.setState({ validPassword: true });
             }
-        } else if(password <= 4){
+        } else if(password <= 3){
             this.setState({ validPassword: false });
         }
     }
@@ -76,10 +76,9 @@ export default class Login extends Component{
         return true;
     }
     render() {
-        const { formValid, loadingVisible } = this.state;
+        const { formValid, loadingVisible, validEmail, validPassword } = this.state;
         const showNotification = formValid ? false : true;
         const background = formValid ? colors.green01 : colors.darkOrange;
-        //const notificationMarginTop = showNotification ? {marginTop: 10} : {};
         return(
             <KeyboardAvoidingView style={[{backgroundColor: background}, styles.wrapper]}>
                 <View style={styles.scrollViewWrapper}>
@@ -94,6 +93,8 @@ export default class Login extends Component{
                             inputType="email"
                             customStyle = {{ marginBottom: 30 }}
                             onChangeText={this.handleEmailChange}
+                            showCheckmark={validEmail}
+                            autoFocus={true}
                         />
                         <InputField 
                             labelText= "PASSWORD"
@@ -104,6 +105,7 @@ export default class Login extends Component{
                             inputType="password"
                             customStyle = {{ marginBottom: 30 }}
                             onChangeText= {this.handlePasswordChange}
+                            showCheckmark={validPassword}
                         />
                     </ScrollView>
                     <View style= {styles.nextButton}>
