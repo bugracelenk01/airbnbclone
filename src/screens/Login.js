@@ -8,19 +8,23 @@ import {
     StyleSheet,
     KeyboardAvoidingView,
 } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { ActionCreators } from '../redux/actions';
 import colors from '../styles/colors';
 import InputField from '../components/form/InputField';
 import NextArrowButton from '../components/buttons/NextArrowButton';
 import Notification from '../components/Notification'
 import Loader from '../components/Loader';
 
-export default class Login extends Component{
+class Login extends Component{
     constructor(props){
         super(props);
         this.state = {
             formValid: true,
             validEmail: false,
             emailAdress: '',
+            password: '',
             validPassword: false,
             loadingVisible: false,
         }
@@ -34,7 +38,8 @@ export default class Login extends Component{
         this.setState({ loadingVisible: true });
 
         setTimeout(() => {
-            if(this.state.emailAdress === 'hello@gmail.com') {
+            const { emailAdress, password } = this.state;
+            if(this.props.logIn(emailAdress, password)){
                 this.setState({ formValid: true, loadingVisible: false });
             } else {
                 this.setState({ formValid: false, loadingVisible: false });
@@ -60,6 +65,8 @@ export default class Login extends Component{
         }
     }
     handlePasswordChange(password) {
+        this.setState({ password });
+
         if(!this.validPassword) {
             if(password.length >= 4){
                 this.setState({ validPassword: true });
@@ -164,3 +171,15 @@ const styles = StyleSheet.create({
         bottom: 0,
     }
 });
+
+const mapStateToProps = (state) => {
+    return{
+        loggedInStatus: state.loggedInStatus,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators(ActionCreators, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
